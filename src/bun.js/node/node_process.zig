@@ -34,6 +34,9 @@ pub fn setTitle(globalObject: *JSGlobalObject, newvalue: *bun.String) callconv(.
 
     if (bun.cli.Bun__Node__ProcessTitle) |slice| bun.default_allocator.free(slice);
     bun.cli.Bun__Node__ProcessTitle = new_title;
+
+    // Actually set the process title in the OS
+    _ = bun.windows.libuv.uv_set_process_title(new_title.ptr);
 }
 
 pub fn createArgv0(globalObject: *jsc.JSGlobalObject) callconv(.c) jsc.JSValue {
